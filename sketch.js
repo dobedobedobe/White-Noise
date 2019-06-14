@@ -1,19 +1,27 @@
 let mic;
 let vol = 0;
-function setup() {
+
+function setup() {	
 	createCanvas(window.innerWidth, window.innerHeight);
 	mic = new p5.AudioIn();
 	mic.start();
 }
 
 function draw() {
-	vol = mic.getLevel();
-	console.log(1 - vol*4);
-	pixelDensity(1 - vol*4);
+	getAudioContext().resume();
+	vol = 1 - (mic.getLevel()*4);
+	console.log(vol);
+	if (vol < 0.1) {
+		pixelDensity(0.05);
+	}
+	else {
+		pixelDensity(vol);
+	}
 	loadPixels();
 	for (var y = 0; y < height; y++) {
 		for (var x = 0; x < width; x++) {
 			var index = (x + y * width) * 4;
+			// var r = noise(xoff, yoff) * 255;
 			var r = random(255);
 
 			pixels[index + 0] = r;
